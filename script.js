@@ -1,19 +1,19 @@
 // =================================================================
 // Detect and format code when content is pasted into the input textarea
 // =================================================================
+let inputElement;
+let outputElement;
 
 document.addEventListener('DOMContentLoaded', function () {
+	inputElement = document.getElementById('input');
+	outputElement = document.getElementById('output');
 	// Add an event listener for the paste event on the input element
 	document.getElementById('input').addEventListener('paste', handlePaste);
 });
 // Event handler for the paste event
 function handlePaste(event) {
-	const inputElement = document.getElementById('input');
-	const outputElement = document.getElementById('output');
-	// Prevent the default paste behavior
 	event.preventDefault();
 
-	// Get the pasted text from the clipboard
 	const clipboardData = event.clipboardData || window.clipboardData;
 	const pastedText = clipboardData.getData('text');
 
@@ -35,8 +35,12 @@ function handlePaste(event) {
 	}
 	let selectedFormat = formatPithl;
 	// Set the pasted text as the value of the input element
-	formatter(pastedText, 'input');
-
+	if (formatter) {
+		formatter(pastedText, 'input');
+	} else {
+		errorHandler('format');
+		setField('input', pastedText);
+	}
 	document.getElementById('submit').addEventListener('click', function () {
 		const data = inputElement.value;
 		const output = parser(data);
@@ -49,7 +53,6 @@ function formatHtml(rawInput, target) {
 		parser: 'html',
 		plugins: [prettierPlugins.html],
 	});
-	console.log(formattedCode);
 	document.getElementById(target).value = formattedCode;
 }
 
@@ -73,8 +76,22 @@ function formatPithl(rawInput, target) {
 			formattedCode += char;
 		}
 	}
+	setField(target, formattedCode);
+}
 
+function setField(target, formattedCode) {
 	document.getElementById(target).value = formattedCode;
+}
+
+function errorHandler(location) {
+	switch (location) {
+		case 'format':
+			console.error('No matching format');
+			break;
+
+		default:
+			break;
+	}
 }
 
 // =================================================================
@@ -84,6 +101,7 @@ function parseHtml(html, depth = 0) {
 	const template = document.createElement('template');
 	template.innerHTML = html.trim();
 	const element = template.content.firstChild;
+	console.log(element);
 
 	let command = 'domBuilder(';
 	command += `'${element.tagName.toLowerCase()}', {`;
