@@ -56,27 +56,31 @@ function formatHtml(rawInput, target) {
 	document.getElementById(target).value = formattedCode;
 }
 
-function formatPithl(rawInput, target) {
-	let indentLevel = 0;
-	let formattedCode = '';
-	let indentation = '  '; // Two spaces for indentation
+function formatPithl(input, target) {
+	const key = 'dom';
+	const inputString = `${input}`.replace(/\s+/g, '');
+	let depth = 0;
+	let waiting = false;
 
-	for (let i = 0; i < rawInput.length; i++) {
-		const char = rawInput[i];
-
-		if (char === '(') {
-			formattedCode += '\n' + indentation.repeat(indentLevel) + char + '\n' + indentation.repeat(indentLevel + 1);
-			indentLevel++;
-		} else if (char === ')') {
-			indentLevel--;
-			formattedCode += '\n' + indentation.repeat(indentLevel) + char;
-		} else if (char === ',') {
-			formattedCode += char + '\n' + indentation.repeat(indentLevel);
+	const formatted = Array.from(inputString, (char, i) => {
+		if (char === '[' && inputString[i + 1] !== ']') {
+			depth++;
+			return '[\n' + '  '.repeat(depth);
+		} else if (char === ']' && inputString[i - 1] !== '[') {
+			waiting = true;
+			return char;
+		} else if (waiting && char === ',') {
+			depth--;
+			waiting = false;
+			return ',\n' + '  '.repeat(depth);
+		} else if (char === ',' && inputString.substring(i + 1).startsWith(key)) {
+			return ',\n' + '  '.repeat(depth);
 		} else {
-			formattedCode += char;
+			return char;
 		}
-	}
-	setField(target, formattedCode);
+	});
+
+	setField(target, formatted.join(''));
 }
 
 function setField(target, formattedCode) {

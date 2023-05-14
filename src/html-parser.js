@@ -34,18 +34,3 @@ function parseHtml(html, depth = 0) {
 
 	return command;
 }
-
-// Usage example:
-const htmlString = `
-  <div id="myDiv" class="container">
-    <div id="wrapper">
-      <div class="test">
-        <div title="p-div">
-          <p>test</p>
-        </div>
-      </div>
-    </div>
-  </div>
-`;
-
-parseHtml(htmlString);

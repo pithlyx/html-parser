@@ -16,23 +16,24 @@ body {
 	width: 100vw;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-evenly;
 	background-color: #ffffff0f;
 }
 
 #inputContainer,
 #outputContainer {
 	height: 100%;
-	width: 100%;
+	width: 40%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
 	align-items: center;
 }
+
 #input,
 #output {
-	height: 85%;
-	width: 80%;
+	height: 75%;
+	width: 90%;
 	background-color: #ffffff20;
 	border: 2px solid #4e006167;
 	border-radius: 0.75vh;
@@ -40,6 +41,16 @@ body {
 	white-space: nowrap;
 	padding: 1vh;
 	color: #cc00ff;
+	font-size: 2vh;
+}
+
+#inputTitle,
+#outputTitle {
+	height: 5%;
+	width: 100%;
+	color: #cc00ff;
+	background-color: #4e0061;
+	border-radius: 100px;
 }
 
 #input:focus,
@@ -52,4 +63,5 @@ body {
 	width: 40%;
 	border: 1px solid #4e006167;
 	background-color: #cc00ff67;
+	border-radius: 100px;
 }
