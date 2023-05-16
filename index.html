@@ -1,25 +1,71 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>HTML Parser</title>
-		<link rel="stylesheet" type="text/css" href="styles.css" />
-		<script src="https://unpkg.com/prettier/standalone.js"></script>
-		<script src="https://unpkg.com/prettier/parser-html.js"></script>
-		<script src="src/script.js"></script>
-		<!-- <script src="ref.js"></script> -->
-		<!-- <script src="src/style.js"></script> -->
-	</head>
-	<body>
-		<div id="title"><h1>Parser</h1></div>
-		<!-- <div class="container">
-			<div id="inputContainer">
-				<textarea id="input" placeholder="Enter text"></textarea>
-				<button id="submit" class="btn"><strong>Submit</strong><br>Button</button>
-			</div>
-			<div id="outputContainer">
-				<textarea id="output" placeholder="Output"></textarea>
-				<button id="copy" class="btn">Copy</button>
-			</div>
-		</div> -->
-	</body>
+  <head>
+    <title>HTML Parser</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="https://unpkg.com/prettier/standalone.js"></script>
+    <script src="https://unpkg.com/prettier/parser-html.js"></script>
+    <script src="src/script.js"></script>
+    <script src="src/parse.js"></script>
+  </head>
+  <body>
+    <div id="title"><h1>Parser</h1></div>
+    <div class="container">
+      <div id="inputContainer">
+        <textarea id="input" placeholder="Enter text"></textarea>
+        <button id="submit" class="btn">
+          <strong>Submit</strong>
+        </button>
+      </div>
+      <div id="outputContainer">
+        <textarea id="output" placeholder="Output"></textarea>
+        <button id="copy" class="btn">Copy</button>
+      </div>
+    </div>
+    <div id="builder">
+      <h2>Builder Class</h2>
+      <pre id="code">
+class Elem {
+  constructor(tag, options = {}, children = []) {
+    if (tag === '#text') {
+      this.element = document.createTextNode(options.text);
+    } else {
+      this.element = document.createElement(tag);
+      if (options.attrs) {
+        for (const [attr, value] of Object.entries(options.attrs)) {
+          this.element.setAttribute(attr, value);
+        }
+      }
+      if (options.classes) {
+        this.element.classList.add(...options.classes);
+      }
+    }
+
+    for (const child of children) {
+      this.element.appendChild(child.element);
+    }
+  }
+
+  append(child) {
+    this.element.appendChild(child.element);
+    return this;
+  }
+
+  static createTextNode(text) {
+    return new Elem('#text', { text });
+  }
+
+  setInnerHTML(html) {
+    this.element.innerHTML = html;
+    return this;
+  }
+
+  toHTML() {
+    return this.element.outerHTML || this.element.textContent;
+  }
+}
+
+      </pre>
+    </div>
+  </body>
 </html>
